@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM Simple · Natalia Veliez</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pk:#7B3FB0;--pk-d:#5B2A8C;--pk-dd:#3E1A66;--pk-l:#DCC8F0;--pk-ll:#F4EBFB;--bg:#FAF5FD;--white:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#E9DDF5;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;--blue:#3b82f6}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+.app{display:flex;height:100vh}
+.sidebar{width:220px;background:var(--pk-dd);display:flex;flex-direction:column;flex-shrink:0}
+.logo-area{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.logo{font-size:16px;font-weight:700;color:#fff}.logo-sub{font-size:10px;color:var(--pk-l);margin-top:2px}
+.nav{padding:10px 0;flex:1}
+.nav-lbl{font-size:9px;font-weight:600;color:var(--pk-l);letter-spacing:0.1em;padding:12px 18px 6px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;color:rgba(255,255,255,0.65);font-size:13px;border-left:3px solid transparent;transition:all 0.15s}
+.ni:hover{background:rgba(255,255,255,0.08);color:#fff}
+.ni.active{background:rgba(255,255,255,0.13);color:#fff;border-left-color:var(--pk-l);font-weight:500}
+.ni svg{width:17px;height:17px;flex-shrink:0}
+.user-area{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:10px}
+.uav{width:34px;height:34px;border-radius:50%;background:var(--pk);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.uname{font-size:12px;font-weight:500;color:#fff}.urole{font-size:10px;color:var(--pk-l)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-title{font-size:16px;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all 0.15s}
+.btn-pk{background:var(--pk);color:#fff}.btn-pk:hover{background:var(--pk-d)}
+.btn-ol{background:var(--white);color:var(--pk-d);border:1px solid var(--pk-l)}.btn-ol:hover{background:var(--pk-ll)}
+.content{flex:1;overflow-y:auto;padding:24px 28px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:6px}
+.stat-val{font-size:26px;font-weight:700;line-height:1}
+.stat-sub{font-size:11px;margin-top:5px;color:var(--green)}
+.stat-bar{height:3px;background:var(--pk-ll);border-radius:2px;margin-top:10px}
+.stat-bar-f{height:100%;background:var(--pk);border-radius:2px}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.sh-title{font-size:14px;font-weight:600}
+.tw{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:22px}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 16px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;background:var(--pk-ll);border-bottom:1px solid var(--border)}
+td{padding:12px 16px;border-bottom:1px solid #F5ECFA;font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FBF7FE;cursor:pointer}
+.ci{display:flex;align-items:center;gap:10px}
+.cav{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.cn{font-weight:500;font-size:13px}.cc{font-size:11px;color:var(--muted)}
+.badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.bg{background:#dcfce7;color:#166534}.ba{background:#fef3c7;color:#92400e}.bb{background:#dbeafe;color:#1e40af}.bp{background:var(--pk-ll);color:var(--pk-dd)}.bgr{background:#f1f5f9;color:#475569}
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+.stage{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;min-height:200px}
+.stage-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.stage-n{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em}
+.stage-c{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.dc{background:var(--pk-ll);border:1px solid var(--pk-l);border-radius:9px;padding:10px;margin-bottom:8px;cursor:pointer;transition:all 0.15s}
+.dc:hover{border-color:var(--pk);background:#F1E4FA}
+.dn{font-size:12px;font-weight:600;color:var(--pk-dd);margin-bottom:3px}
+.dco{font-size:11px;color:var(--muted);margin-bottom:5px}
+.dv{font-size:13px;font-weight:700;color:var(--pk-d)}
+.dp2{font-size:10px;color:var(--muted);margin-top:3px}
+.detail-panel{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px;display:none}
+.detail-panel.open{display:block}
+.dp-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.dp-name{font-size:18px;font-weight:700}.dp-company{font-size:13px;color:var(--muted);margin-top:3px}
+.dp-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:14px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.dp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.dp-field{background:var(--pk-ll);border-radius:9px;padding:10px 14px}
+.dp-fl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
+.dp-fv{font-size:13px;font-weight:500}
+.tl{border-top:1px solid var(--border);padding-top:14px}
+.tl-t{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px}
+.tl-i{display:flex;gap:10px;margin-bottom:10px}
+.tl-d{width:8px;height:8px;border-radius:50%;background:var(--pk);margin-top:5px;flex-shrink:0}
+.tl-txt{font-size:13px}.tl-dt{font-size:11px;color:var(--muted)}
+.tabs{display:flex;gap:2px;background:var(--border);border-radius:9px;padding:3px;width:fit-content;margin-bottom:16px}
+.tab{padding:7px 16px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all 0.15s}
+.tab.active{background:var(--white);color:var(--pk-d);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:26px;width:460px;max-width:92vw;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:18px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em}
+input,select{padding:9px 13px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none}
+input:focus,select:focus{border-color:var(--pk)}
+.modal-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--pk-dd);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:200;opacity:0;transform:translateY(8px);transition:all 0.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.tabs{flex-wrap:wrap}.br{background:#fee2e2;color:#991b1b}
+.bar{display:grid;grid-template-columns:110px 1fr 76px;gap:10px;align-items:center;margin-bottom:9px;font-size:12px}.bar div{height:8px;background:var(--pk-ll);border-radius:4px}.bar i{display:block;height:100%;background:var(--pk);border-radius:4px}.bar b{text-align:right}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.ck{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid #F5ECFA;flex-wrap:wrap}
+.ring{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;margin:0 auto}.ring i{width:72px;height:72px;border-radius:50%;background:#fff;display:grid;place-items:center;font:700 20px Inter;font-style:normal}
+.sbtn{padding:5px 11px;font-size:12px;border-radius:7px;border:1px solid var(--pk-l);background:#fff;color:var(--pk-d);cursor:pointer;font-family:Inter}.on1{background:#dcfce7;color:#166534;border-color:#86efac}.on2{background:#fee2e2;color:#991b1b;border-color:#fca5a5}.on3{background:#f1f5f9;color:#475569}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mgrid .fg{margin:0}.mgrid .fg:first-child{grid-column:1/-1}
+@media(max-width:800px){.app{flex-direction:column}.sidebar{width:100%}.nav{display:flex;overflow-x:auto;padding:0}.nav-lbl,.user-area,.logo-sub{display:none}.ni{border-left:0;white-space:nowrap;padding:10px 12px}.stats,.pipeline{grid-template-columns:1fr 1fr!important}.dp-grid{grid-template-columns:1fr}.content{padding:16px}.topbar{padding:0 14px}#srch{width:120px!important}.tw{overflow-x:auto}.g2{grid-template-columns:1fr!important}}
+.dgrid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:22px}@media(max-width:800px){.dgrid{grid-template-columns:1fr!important}}</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo-area"><div class="logo">NPV · CRM</div><div class="logo-sub">Power Platform Demo</div></div>
+    <div class="nav">
+      <div class="nav-lbl">Principal</div>
+      <div class="ni active" onclick="go('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
+      </div>
+      <div class="ni" onclick="go('clientes')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes
+      </div>
+      <div class="ni" onclick="go('pipeline')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="17" y="5" width="4" height="16"/></svg>Pipeline
+      </div>
+      <div class="nav-lbl">Gestión</div>
+      <div class="ni" onclick="go('actividades')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Actividades
+      </div>
+      <div class="ni" onclick="toast('Reportes — próximamente 📊')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reportes
+      </div>
+    </div>
+    <div class="user-area">
+      <div class="uav">NV</div>
+      <div><div class="uname">Natalia Veliez</div><div class="urole">CRM Specialist</div></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input type="text" id="srch" placeholder="🔍  Buscar cliente..." style="padding:8px 14px;border:1px solid var(--border);border-radius:9px;font-size:13px;font-family:Inter,sans-serif;outline:none;width:220px" oninput="filterC()">
+        <button class="btn btn-pk" onclick="openModal()">+ Nuevo cliente</button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-title">Nuevo cliente</div>
+    <div class="frow">
+      <div class="fg"><label>Nombre</label><input id="fn" placeholder="Sofía"></div>
+      <div class="fg"><label>Apellido</label><input id="fa" placeholder="García"></div>
+    </div>
+    <div class="fg"><label>Empresa</label><input id="fe" placeholder="Acme Corp"></div>
+    <div class="frow">
+      <div class="fg"><label>Email</label><input id="fem" type="email" placeholder="sofia@acme.com"></div>
+      <div class="fg"><label>Teléfono</label><input id="ft" placeholder="+54 11 0000-0000"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Estado</label><select id="fst"><option>Prospecto</option><option>Activo</option><option>En negociación</option><option>Inactivo</option></select></div>
+      <div class="fg"><label>Industria</label><select id="fi"><option>Tecnología</option><option>Retail</option><option>Salud</option><option>Manufactura</option><option>Servicios</option><option>Educación</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Valor estimado</label><input id="fv" placeholder="$10,000"></div>
+      <div class="fg"><label>Origen</label><select id="for"><option>LinkedIn</option><option>Web</option><option>Referido</option><option>Evento</option></select></div>
+    </div>
+    <div class="modal-acts">
+      <button class="btn btn-ol" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-pk" onclick="saveClient()">✓ Guardar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toastEl"></div>
+
+<script>
+const AVCOL=['#7B3FB0','#5B2A8C','#3E1A66','#3b82f6','#22c55e','#f59e0b','#8b5cf6'];
+let clients=[
+  {id:1,n:'Sofía',a:'Martínez',e:'TechSoluciones SA',em:'sofia@techsol.com',t:'+54 9 11 2234-5678',st:'Activo',in:'Tecnología',v:'$18,000',f:'15 ene 2025',or:'LinkedIn'},
+  {id:2,n:'Carlos',a:'Ruiz',e:'Distribuidora Norte',em:'carlos@distnorte.com',t:'+54 9 11 3345-6789',st:'En negociación',in:'Retail',v:'$24,500',f:'28 ene 2025',or:'Referido'},
+  {id:3,n:'Valentina',a:'López',e:'HealthCare Plus',em:'valen@hcplus.com',t:'+54 9 11 4456-7890',st:'Prospecto',in:'Salud',v:'$9,000',f:'3 feb 2025',or:'Web'},
+  {id:4,n:'Martín',a:'González',e:'Manufact AR',em:'martin@manufactar.com',t:'+54 9 11 5567-8901',st:'Activo',in:'Manufactura',v:'$31,200',f:'10 feb 2025',or:'Evento'},
+  {id:5,n:'Luciana',a:'Fernández',e:'EduTech SRL',em:'luci@edutech.com',t:'+54 9 11 6678-9012',st:'Activo',in:'Educación',v:'$12,700',f:'14 feb 2025',or:'LinkedIn'},
+  {id:6,n:'Diego',a:'Peralta',e:'Consultora DGP',em:'diego@dgp.com',t:'+54 9 11 7789-0123',st:'Prospecto',in:'Servicios',v:'$7,400',f:'20 feb 2025',or:'Web'},
+  {id:7,n:'Camila',a:'Torres',e:'RetailMax',em:'camila@rmax.com',t:'+54 9 11 8890-1234',st:'Inactivo',in:'Retail',v:'$5,200',f:'1 mar 2025',or:'Referido'},
+  {id:8,n:'Andrés',a:'Silva',e:'AgriTech Cuyo',em:'andres@agritech.com',t:'+54 9 11 9901-2345',st:'En negociación',in:'Tecnología',v:'$19,800',f:'8 mar 2025',or:'Evento'},
+];
+const opps=[
+  {nm:'Implementación CRM',cl:'Sofía Martínez',v:'$18,000',et:'Propuesta',pr:'60%'},
+  {nm:'Automatización procesos',cl:'Carlos Ruiz',v:'$24,500',et:'Negociación',pr:'75%'},
+  {nm:'Consultoría Power BI',cl:'Valentina López',v:'$9,000',et:'Lead',pr:'20%'},
+  {nm:'Power Apps Suite',cl:'Martín González',v:'$31,200',et:'Ganado',pr:'100%'},
+  {nm:'Capacitación equipo',cl:'Luciana Fernández',v:'$12,700',et:'Contactado',pr:'35%'},
+  {nm:'Integración ERP',cl:'Andrés Silva',v:'$19,800',et:'Propuesta',pr:'55%'},
+];
+const acts=[
+  {tp:'Llamada',ds:'Seguimiento propuesta CRM',cl:'Sofía Martínez',fh:'Hoy 10:00',st:'Pendiente'},
+  {tp:'Reunión',ds:'Demo Power Apps Suite',cl:'Martín González',fh:'Hoy 15:30',st:'Confirmada'},
+  {tp:'Email',ds:'Enviar cotización integración',cl:'Andrés Silva',fh:'Mañana 09:00',st:'Pendiente'},
+  {tp:'Llamada',ds:'Primer contacto consultoría',cl:'Valentina López',fh:'Mié 11:00',st:'Pendiente'},
+  {tp:'Reunión',ds:'Revisión avance capacitación',cl:'Luciana Fernández',fh:'Jue 14:00',st:'Confirmada'},
+  {tp:'Email',ds:'Propuesta automatización',cl:'Carlos Ruiz',fh:'Vie 09:30',st:'Borrador'},
+];
+let view='dashboard',sf='todos';
+function ini(n,a){return(n[0]+(a?a[0]:'')).toUpperCase()}
+function avc(id){return AVCOL[id%AVCOL.length]}
+function bst(s){const m={Activo:'bg','En negociación':'ba',Prospecto:'bb',Inactivo:'bgr'};return`<span class="badge ${m[s]||'bgr'}">${s}</span>`}
+function btp(s){const m={Llamada:'bb',Reunión:'bp',Email:'ba'};return`<span class="badge ${m[s]||'bgr'}">${s}</span>`}
+function bact(s){const m={Pendiente:'ba',Confirmada:'bg',Borrador:'bgr'};return`<span class="badge ${m[s]||'bgr'}">${s}</span>`}
+
+function renderTable(data){
+  if(!data.length)return`<div style="padding:32px;text-align:center;color:var(--muted)">No hay clientes que coincidan.</div>`;
+  return`<table><thead><tr><th>Cliente</th><th>Email</th><th>Industria</th><th>Estado</th><th>Valor est.</th><th>Desde</th></tr></thead><tbody>${data.map(c=>`
+  <tr onclick="showDetail(${c.id})">
+    <td><div class="ci"><div class="cav" style="background:${avc(c.id)}">${ini(c.n,c.a)}</div><div><div class="cn">${c.n} ${c.a}</div><div class="cc">${c.e}</div></div></div></td>
+    <td style="color:var(--muted)">${c.em}</td>
+    <td><span class="badge bp">${c.in}</span></td>
+    <td>${bst(c.st)}</td>
+    <td style="font-weight:600;color:var(--pk-d)">${c.v}</td>
+    <td style="color:var(--muted)">${c.f}</td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function showDetail(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  const panel=document.getElementById('dpanel');if(!panel)return;
+  const tl=[
+    {t:`Incorporado vía ${c.or}`,d:c.f},
+    {t:'Primer contacto realizado',d:'2 días después'},
+    {t:'Propuesta enviada por email',d:'1 semana después'},
+    {t:'Reunión de seguimiento programada',d:'Próximamente'},
+  ];
+  panel.innerHTML=`
+  <div class="dp-head">
+    <div><div class="dp-name">${c.n} ${c.a}</div><div class="dp-company">${c.e} · ${c.in}</div></div>
+    <div style="display:flex;gap:8px;align-items:center">${bst(c.st)}<button class="dp-close" onclick="document.getElementById('dpanel').classList.remove('open')">✕</button></div>
+  </div>
+  <div class="dp-grid">
+    <div class="dp-field"><div class="dp-fl">Email</div><div class="dp-fv">${c.em}</div></div>
+    <div class="dp-field"><div class="dp-fl">Teléfono</div><div class="dp-fv">${c.t}</div></div>
+    <div class="dp-field"><div class="dp-fl">Valor estimado</div><div class="dp-fv" style="color:var(--pk-d);font-weight:700">${c.v}</div></div>
+    <div class="dp-field"><div class="dp-fl">Origen</div><div class="dp-fv">${c.or}</div></div>
+    <div class="dp-field"><div class="dp-fl">Incorporado</div><div class="dp-fv">${c.f}</div></div>
+    <div class="dp-field"><div class="dp-fl">Industria</div><div class="dp-fv">${c.in}</div></div>
+  </div>
+  <div class="tl"><div class="tl-t">Historial</div>${tl.map(i=>`<div class="tl-i"><div class="tl-d"></div><div><div class="tl-txt">${i.t}</div><div class="tl-dt">${i.d}</div></div></div>`).join('')}</div>`;
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function filterC(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  if(view==='clientes'){
+    const fd=clients.filter(c=>(c.n+' '+c.a+' '+c.e).toLowerCase().includes(q));
+    document.getElementById('ctable').innerHTML=renderTable(fd);
+  }
+}
+
+function go(v){
+  view=v;
+  document.querySelectorAll('.ni').forEach(el=>el.classList.remove('active'));
+  const idx={dashboard:0,clientes:1,pipeline:2,actividades:3};
+  document.querySelectorAll('.ni')[idx[v]]?.classList.add('active');
+  document.getElementById('page-title').textContent={dashboard:'Dashboard',clientes:'Clientes',pipeline:'Pipeline de ventas',actividades:'Actividades'}[v];
+  renderView();
+}
+
+function renderView(){
+  const el=document.getElementById('content');
+  const activos=clients.filter(c=>c.st==='Activo').length;
+  const stages=['Lead','Contactado','Propuesta','Negociación','Ganado'];
+  const sc={'Lead':'#93c5fd','Contactado':'#6ee7b7','Propuesta':'#fbbf24','Negociación':'#f97316','Ganado':'#22c55e'};
+  const statsHtml=`<div class="stats">
+    <div class="stat"><div class="stat-lbl">Clientes activos</div><div class="stat-val">${activos}</div><div class="stat-sub">↑ +2 este mes</div><div class="stat-bar"><div class="stat-bar-f" style="width:72%"></div></div></div>
+    <div class="stat"><div class="stat-lbl">Oportunidades</div><div class="stat-val">${opps.filter(o=>o.et!=='Ganado').length}</div><div class="stat-sub">↑ +1 esta semana</div><div class="stat-bar"><div class="stat-bar-f" style="width:55%"></div></div></div>
+    <div class="stat"><div class="stat-lbl">Pipeline total</div><div class="stat-val">$87K</div><div class="stat-sub">↑ +12% vs mes ant.</div><div class="stat-bar"><div class="stat-bar-f" style="width:68%"></div></div></div>
+    <div class="stat"><div class="stat-lbl">Tasa de cierre</div><div class="stat-val">34%</div><div class="stat-sub">↑ +5% vs Q1</div><div class="stat-bar"><div class="stat-bar-f" style="width:34%"></div></div></div>
+  </div>`;
+
+  if(view==='dashboard'){
+    el.innerHTML=statsHtml+
+    `<div class="dgrid"><div><div class="sh"><div class="sh-title">Clientes recientes</div><button class="btn btn-ol" onclick="go('clientes')">Ver todos →</button></div><div class="tw" style="margin:0">${renderTable(clients.slice(0,4))}</div></div>${funnelCard()}</div>
+    <div class="sh"><div class="sh-title">Pipeline de ventas</div><button class="btn btn-ol" onclick="go('pipeline')">Ver completo →</button></div>
+    <div class="pipeline">${stages.map(s=>{const items=opps.filter(o=>o.et===s);return`<div class="stage"><div class="stage-h"><div class="stage-n">${s}</div><div class="stage-c" style="background:${sc[s]}30;color:${sc[s]}">${items.length}</div></div>${items.map(o=>`<div class="dc"><div class="dn">${o.nm}</div><div class="dco">${o.cl}</div><div class="dv">${o.v}</div><div class="dp2">Prob: ${o.pr}</div></div>`).join('')||`<div style="text-align:center;padding:14px;color:var(--muted);font-size:11px">—</div>`}</div>`;}).join('')}</div>`;
+  } else if(view==='clientes'){
+    const fd=sf==='todos'?clients:clients.filter(c=>c.st===sf);
+    el.innerHTML=`<div id="dpanel" class="detail-panel"></div>
+    <div class="sh"><div class="tabs">
+      <div class="tab ${sf==='todos'?'active':''}" onclick="setFilter('todos',this)">Todos (${clients.length})</div>
+      <div class="tab ${sf==='Activo'?'active':''}" onclick="setFilter('Activo',this)">Activos</div>
+      <div class="tab ${sf==='Prospecto'?'active':''}" onclick="setFilter('Prospecto',this)">Prospectos</div>
+      <div class="tab ${sf==='En negociación'?'active':''}" onclick="setFilter('En negociación',this)">En negociación</div>
+    </div></div>
+    <div class="tw" id="ctable">${renderTable(fd)}</div>`;
+  } else if(view==='pipeline'){
+    el.innerHTML=statsHtml+`<div class="pipeline">${stages.map(s=>{const items=opps.filter(o=>o.et===s);return`<div class="stage"><div class="stage-h"><div class="stage-n">${s}</div><div class="stage-c" style="background:${sc[s]}30;color:${sc[s]}">${items.length}</div></div>${items.map(o=>`<div class="dc"><div class="dn">${o.nm}</div><div class="dco">${o.cl}</div><div class="dv">${o.v}</div><div class="dp2">Prob: ${o.pr}</div></div>`).join('')||`<div style="text-align:center;padding:14px;color:var(--muted);font-size:11px">Sin oportunidades</div>`}</div>`;}).join('')}</div>`;
+  } else {
+    el.innerHTML=`<div class="tw"><table><thead><tr><th>Tipo</th><th>Actividad</th><th>Cliente</th><th>Fecha y hora</th><th>Estado</th></tr></thead><tbody>${acts.map(a=>`<tr><td>${btp(a.tp)}</td><td style="font-weight:500">${a.ds}</td><td style="color:var(--muted)">${a.cl}</td><td style="color:var(--muted)">${a.fh}</td><td>${bact(a.st)}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+}
+
+function funnelCard(){const st=['Lead','Contactado','Propuesta','Negociación','Ganado'],cl=['#3E1A66','#5B2A8C','#7B3FB0','#a685d4','#d3bdf0'],tx=['#fff','#fff','#fff','#3E1A66','#3E1A66'],W=i=>250-i*46;let y=0,svg='';
+st.forEach((s,i)=>{const n=opps.filter(o=>o.et===s).length,a=W(i),b=W(i+1);svg+=`<polygon points="${130-a/2},${y} ${130+a/2},${y} ${130+b/2},${y+30} ${130-b/2},${y+30}" fill="${cl[i]}"/><text x="130" y="${y+19}" text-anchor="middle" font-size="12" font-weight="700" fill="${tx[i]}" font-family="Inter">${n}</text>`;y+=33});
+return`<div class="tw" style="padding:16px;margin:0"><div class="sh-title" style="margin-bottom:10px">Pipeline</div><svg viewBox="0 0 260 165" style="width:100%;max-width:260px;display:block;margin:0 auto">${svg}</svg><div style="margin-top:12px;display:grid;gap:6px;font-size:12px">${st.map((s,i)=>`<div style="display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;border-radius:50%;background:${cl[i]}"></span><span style="flex:1">${s}</span><b>${opps.filter(o=>o.et===s).length}</b></div>`).join('')}</div></div>`}
+function setFilter(f,el){
+  sf=f;document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  const fd=f==='todos'?clients:clients.filter(c=>c.st===f);
+  document.getElementById('ctable').innerHTML=renderTable(fd);
+}
+function openModal(){document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function saveClient(){
+  const n=document.getElementById('fn').value.trim();
+  if(!n){toast('Ingresá al menos el nombre');return}
+  clients.unshift({id:clients.length+1,n,a:document.getElementById('fa').value||'',e:document.getElementById('fe').value||'—',em:document.getElementById('fem').value||'—',t:document.getElementById('ft').value||'—',st:document.getElementById('fst').value,in:document.getElementById('fi').value,v:document.getElementById('fv').value||'$0',f:'Hoy',or:document.getElementById('for').value});
+  closeModal();toast('✓ Cliente guardado');
+  ['fn','fa','fe','fem','ft','fv'].forEach(id=>document.getElementById(id).value='');
+  renderView();
+}
+function toast(msg){const t=document.getElementById('toastEl');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal()});
+renderView();
+</script>
+</body>
+</html>
